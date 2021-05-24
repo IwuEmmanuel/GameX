@@ -2,14 +2,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment as env } from "src/environments/environment";
+//import { environment as env } from "src/environments/environment";
 import { APIResponse, Game } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
-
+  
+  BASE_URL = 'https://rawg-video-games-database.p.rapidapi.com';
   constructor(private http: HttpClient) { }
 
   getGameList (
@@ -22,7 +23,7 @@ export class HttpService {
       params = new HttpParams().set('ordering', ordering).set('search', search); 
     }
 
-    return this.http.get<APIResponse<Game>>(`${env.BASE_URL}/games`, {
+    return this.http.get<APIResponse<Game>>(`${this.BASE_URL}/games`, {
       params: params,
 
     });
@@ -31,12 +32,12 @@ export class HttpService {
 
 
   getGameDetails(id: string): Observable<Game> {
-        const gameInfoRequest = this.http.get(`${env.BASE_URL}/games/${id}`);
+        const gameInfoRequest = this.http.get(`${this.BASE_URL}/games/${id}`);
         const gameTrailersRequest = this.http.get(
-          `${env.BASE_URL}/games/${id}/movies`
+          `${this.BASE_URL}/games/${id}/movies`
         );
       const gameScreenshotsRequest = this.http.get(
-        `${env.BASE_URL}/games/${id}/screenshots`
+        `${this.BASE_URL}/games/${id}/screenshots`
       );
 
 
@@ -54,6 +55,5 @@ export class HttpService {
         })
       );
     }
-
-  
+ 
 }
